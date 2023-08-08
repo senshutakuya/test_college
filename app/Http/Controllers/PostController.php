@@ -15,5 +15,16 @@ class PostController extends Controller
        
        
     }
+    
+    public function show(Post $post)
+    //ここのPostはモデルクラスのPost
+    // web.phpのRoute::get('/posts/{post}', [PostController::class ,'show']);　の{$post}とここの$postは一緒にしないといけない
+    // 引数の$postはid=1のPostインスタンス
+    {
+        return view("posts/show")->with(["post" => $post]);
+
+        // viewにあるpostsフォルダのshow.blade.phpの表示の際に使うのでposts/showとする。
+        // with[変数名=>値]とする。今回の場合はshow関数の引数の$postを渡す
+    }
 }
 ?>
