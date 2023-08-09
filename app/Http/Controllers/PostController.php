@@ -26,5 +26,12 @@ class PostController extends Controller
         // viewにあるpostsフォルダのshow.blade.phpの表示の際に使うのでposts/showとする。
         // with[変数名=>値]とする。今回の場合はshow関数の引数の$postを渡す
     }
+    
+    public function create(Post $post)
+    {
+        return view("posts/create");
+        //単にcreateページを返すだけだよ
+        
+    }
 }
 ?>
