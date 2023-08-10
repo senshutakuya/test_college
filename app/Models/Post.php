@@ -9,6 +9,16 @@ class Post extends Model
 {
     use HasFactory;
     
+    protected $fillable = [
+        "title",
+        "body"
+        
+    ];
+    // fillが可能なプロパティを指定しています。
+    // これを定義する事でfill関数とsave関数は元々Postモデルクラスが継承しているModelクラスのメソッドを参照して利用が可能なので、今回モデルに実装するのは以下のfillableのみでOK
+    // これを設定するとpostメソッドのtitleとbodyというキーに関して保存ができる
+        
+    
     public function getPagenateByLimit(int $limit_count = 5)
     {
         // updated_atで降順に並べたあと、limitで件数制限をかける

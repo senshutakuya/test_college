@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest; // バリデーションチェックの為にPostRequestをuse
 
 class PostController extends Controller
 {
@@ -25,6 +25,20 @@ class PostController extends Controller
 
         // viewにあるpostsフォルダのshow.blade.phpの表示の際に使うのでposts/showとする。
         // with[変数名=>値]とする。今回の場合はshow関数の引数の$postを渡す
+    }
+    
+    public function create(Post $post)
+    {
+        return view("posts/create");
+        //単にcreateページを返すだけだよ
+        
+    }
+    
+   public function store(PostRequest $request, Post $post )
+    {
+        $input = $request['post'];
+        $post->fill($input)->save();
+        return redirect('/posts/' . $post->id);
     }
 }
 ?>
