@@ -33,5 +33,12 @@ class PostController extends Controller
         //単にcreateページを返すだけだよ
         
     }
+    
+   public function store(Request $request, Post $post)
+    {
+        $input = $request['post'];
+        $post->fill($input)->save();
+        return redirect('/posts/' . $post->id);
+    }
 }
 ?>

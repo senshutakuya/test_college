@@ -26,5 +26,7 @@ Route::get('/', [PostController::class, 'index']);
 
 Route::get("/posts/create",[PostController::class,"create"]);
 
+Route::post('/posts', [PostController::class, 'store']);
+
 Route::get("/posts/{post}",[PostController::class,"show"]);
 // 今回は/posts/(対象データID)なのでPostController.phpのshow関数のreturn view("posts/show")->with["post"=>$post]のwithで設定した変数名"posts"を対象データIDの部分にする
