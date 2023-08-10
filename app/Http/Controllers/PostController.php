@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest; // バリデーションチェックの為にPostRequestをuse
 
 class PostController extends Controller
 {
@@ -34,7 +34,7 @@ class PostController extends Controller
         
     }
     
-   public function store(Request $request, Post $post)
+   public function store(PostRequest $request, Post $post )
     {
         $input = $request['post'];
         $post->fill($input)->save();
