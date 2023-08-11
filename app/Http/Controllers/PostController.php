@@ -18,7 +18,7 @@ class PostController extends Controller
     
     public function show(Post $post)
     //ここのPostはモデルクラスのPost
-    // web.phpのRoute::get('/posts/{post}', [PostController::class ,'show']);　の{$post}とここの$postは一緒にしないといけない
+    // web.phpのRoute::get('/posts/{post}', [PostController::class ,'show']);　の{post}とここの$postは一緒にしないといけない
     // 引数の$postはid=1のPostインスタンス
     {
         return view("posts/show")->with(["post" => $post]);
@@ -38,6 +38,25 @@ class PostController extends Controller
     {
         $input = $request['post'];
         $post->fill($input)->save();
+        return redirect('/posts/' . $post->id);
+    }
+    
+    public function edit(Post $post)
+    {
+        return view('posts.edit')->with(['post' => $post]);
+    }
+    
+    public function update(PostRequest $request, Post $post)
+    // php artisan make:request PostRequestでつくったPostRequestファイルのPostRequestをインスタンス化したものをつかっている
+
+    {
+        $input_post = $request['post'];
+        // この部分のpostはblade.phpで指定したname属性値に依存する
+        // 例えばedit.blade.phpでフォームの部分をname="aaa[title]" とかにしとけば
+        // ここも$input_post = $request['aaa'];になる。
+        // ちなみにこの処理によってPUTメソッドを使って送ったbodyとtitleの部分を参照できる
+        $post->fill($input_post)->save();
+    
         return redirect('/posts/' . $post->id);
     }
 }

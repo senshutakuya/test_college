@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <!-- 文字エンコーディングをUTF-8に設定。 -->
 
-    <title>Blog_detail</title>
+    <title>Blog</title>
     <!-- タイトルタグ。ページのタイトルを表示するブラウザタブに表示される。 -->
 
     <!-- Fonts -->
@@ -17,27 +17,25 @@
 
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 </head>
-
 <body>
-    
-        <h1 class="title">
-            {{ $post->title }}
-        </h1>
-        <div class="content">
-            <div class="content__post">
-                <h3>本文</h3>
-                <p>{{ $post->body }}</p>    
+        <h1>Blog Name</h1>
+        <form action="/posts/{{$post->id}}" method="POST">
+            <!--htmlでPUTメソッドはサポートされていないからPOSTとなる-->
+            @csrf
+            @method('PUT')
+            <div class="title">
+                <h2>Title</h2>
+                <input type="text" name="post[title]" placeholder="タイトル" value="{{$post->title }}"/>
+                <p class="title__error" style="color:red">{{ $errors->first('post.title') }}</p>
             </div>
-        </div>
-        <div class="edit">
-            <a href="/posts/{{$post->id}}/edit">edit</a>
-            <!--$post->idのpostはweb.phpで指定してあるeditへのルーティングの部分である-->
-            <!--/posts/{post}/editこの部分のpostの事でweb.phpが仮に/posts/{aaa}/editなら-->
-            <!--$aaa->になっている-->
-        </div>
-        <div class="footer">
-            <a href="/">戻る</a>
-        </div>
+            <div class="body">
+                <h2>Body</h2>
+                <textarea name="post[body]" placeholder="今日も1日お疲れさまでした。">{{$post->body}}</textarea>
+                <p class="body__error" style="color:red">{{ $errors->first('post.body') }}</p>
+            </div>
+            <input type="submit" value="update"/>
+        </form>
+        <div class="back">[<a href="/posts/{{$post->id}}">back</a>]</div>
     </body>
 </html>
 <!-- HTML文書の終了。 -->
