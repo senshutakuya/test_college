@@ -4,10 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+// 倫理削除をする事が出来るSoftDeletesをuse
 
 class Post extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+    // ここにもUse宣言をする事でクラス内でも使える
+    // 以降はdeleted_atが追加され削除扱いになり論理削除ができる。
     
     protected $fillable = [
         "title",

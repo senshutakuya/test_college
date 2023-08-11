@@ -34,3 +34,5 @@ Route::get("/posts/{post}/edit",[PostController::class,"edit"]);
 // 今更ながらこの{post}はPostControllerにあるPost
 Route::put("/posts/{post}",[PostController::class,"update"]);
 // これによってPUTメソッドでpost/idにPostController.phpのupdate関数をセット
+Route::delete("/posts/{post}",[PostController::class,"delete"]);
+// これによってdeleteメソッドでposts/idにPostController.phpのdelete関数をセット
