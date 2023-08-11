@@ -18,7 +18,7 @@ class PostController extends Controller
     
     public function show(Post $post)
     //ここのPostはモデルクラスのPost
-    // web.phpのRoute::get('/posts/{post}', [PostController::class ,'show']);　の{$post}とここの$postは一緒にしないといけない
+    // web.phpのRoute::get('/posts/{post}', [PostController::class ,'show']);　の{post}とここの$postは一緒にしないといけない
     // 引数の$postはid=1のPostインスタンス
     {
         return view("posts/show")->with(["post" => $post]);
@@ -39,6 +39,11 @@ class PostController extends Controller
         $input = $request['post'];
         $post->fill($input)->save();
         return redirect('/posts/' . $post->id);
+    }
+    
+    public function edit(Post $post)
+    {
+        return view('posts.edit')->with(['post' => $post]);
     }
 }
 ?>
