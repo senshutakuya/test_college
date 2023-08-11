@@ -59,5 +59,13 @@ class PostController extends Controller
     
         return redirect('/posts/' . $post->id);
     }
+    // use App\Models\Post;としているからPostを使える
+    public function delete(Post $post)
+    {
+        $post->delete();
+        // モデルクラスのdelete関数を使う事で簡単に消せる
+        return redirect('/');
+        // /にリダイレクト処理
+    }
 }
 ?>
