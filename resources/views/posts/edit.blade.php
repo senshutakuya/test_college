@@ -36,6 +36,7 @@
             <input type="submit" value="update"/>
         </form>
         <div class="back">[<a href="/posts/{{$post->id}}">back</a>]</div>
+        {{ Auth::user()->name }}
     </body>
 </html>
 <!-- HTML文書の終了。 -->

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Category;
+use App\Models\Category;//カテゴリー別に選ぶためにuse
 use App\Models\Post;
 use App\Http\Requests\PostRequest; // バリデーションチェックの為にPostRequestをuse
 

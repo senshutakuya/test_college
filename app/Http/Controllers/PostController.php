@@ -3,69 +3,62 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Http\Requests\PostRequest; // バリデーションチェックの為にPostRequestをuse
+use App\Http\Requests\PostRequest;
+use GuzzleHttp\Client; // Guzzleクライアントをインポート
+use App\Models\Category;
 
 class PostController extends Controller
 {
     public function index(Post $post)
     {
-        
-        return view('posts/index')->with(['posts' => $post->getPagenateByLimit()]);  
-       //blade内で使う変数'posts'と設定。'posts'の中身にgetを使い、インスタンス化した$postを代入
-       
-       
-    }
-    
-    public function show(Post $post)
-    //ここのPostはモデルクラスのPost
-    // web.phpのRoute::get('/posts/{post}', [PostController::class ,'show']);　の{post}とここの$postは一緒にしないといけない
-    // 引数の$postはid=1のPostインスタンス
-    {
-        return view("posts/show")->with(["post" => $post]);
+        // クライアントインスタンス生成
+        $client = new \GuzzleHttp\Client();
 
-        // viewにあるpostsフォルダのshow.blade.phpの表示の際に使うのでposts/showとする。
-        // with[変数名=>値]とする。今回の場合はshow関数の引数の$postを渡す
-    }
-    
-    public function create(Post $post)
-    {
-        return view("posts/create");
-        //単にcreateページを返すだけだよ
+        // teratail APIのURL
+        $url = 'https://teratail.com/api/v1/questions';
+
+        // GET通信とアクセストークンの認証
+        $response = $client->request(
+            'GET',
+            $url,
+            // teratailのトークン情報をBearerトークンに指定する。
+            // Bearer は、トークン情報が正当な物か確かめる仕組みの事でそれのキーの値にtertailの値を渡す
+            ['Bearer' => config('services.teratail.token')]
+        );
+
+        // JSONデータを連想配列にデコード
+        $questions = json_decode($response->getBody(), true);
         
+        // dd($questions);
+
+        // 既存の投稿一覧も取得
+        $posts = $post->getPagenateByLimit();
+
+        return view('posts.index')->with([
+            'posts' => $posts,
+            'questions' => $questions,
+        ]);
+    }
+
+    // 他のメソッドはそのまま残す
+
+    public function show(Post $post)
+    {
+        return view("posts.show")->with(["post" => $post]);
+    }
+
+    // 他のメソッドはそのまま残す
+    public function create(Category $category)
+    // useしたCategoryのクラスをインスタンスとして引数にする
+    {
+        return view('posts.create')->with(['categories' => $category->get()]);
+        // postsフォルダのcreate.blade.phpを返す。その時にCategoryのget関数の値をcategoriesの値として使える様にする。
     }
     
-   public function store(PostRequest $request, Post $post )
+    public function store(PostRequest $request, Post $post )
     {
         $input = $request['post'];
         $post->fill($input)->save();
         return redirect('/posts/' . $post->id);
     }
-    
-    public function edit(Post $post)
-    {
-        return view('posts.edit')->with(['post' => $post]);
-    }
-    
-    public function update(PostRequest $request, Post $post)
-    // php artisan make:request PostRequestでつくったPostRequestファイルのPostRequestをインスタンス化したものをつかっている
-
-    {
-        $input_post = $request['post'];
-        // この部分のpostはblade.phpで指定したname属性値に依存する
-        // 例えばedit.blade.phpでフォームの部分をname="aaa[title]" とかにしとけば
-        // ここも$input_post = $request['aaa'];になる。
-        // ちなみにこの処理によってPUTメソッドを使って送ったbodyとtitleの部分を参照できる
-        $post->fill($input_post)->save();
-    
-        return redirect('/posts/' . $post->id);
-    }
-    // use App\Models\Post;としているからPostを使える
-    public function delete(Post $post)
-    {
-        $post->delete();
-        // モデルクラスのdelete関数を使う事で簡単に消せる
-        return redirect('/');
-        // /にリダイレクト処理
-    }
 }
-?>

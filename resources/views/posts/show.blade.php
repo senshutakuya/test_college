@@ -38,6 +38,7 @@
         <div class="footer">
             <a href="/">戻る</a>
         </div>
+        {{ Auth::user()->name }}
     </body>
 </html>
 <!-- HTML文書の終了。 -->
